@@ -8,19 +8,18 @@ import random
 
 ######################    PLAYER INFORMATION ################################
 
-#PLAYER INPUT for name and skill
+#PLAYER INPUT for name and skill level
 print('What is your name Traveler?')
 playerName = input()
 print('What is your skill level for Hiding')
 pHideSkill = int(input())
 
 
-######### DETERMINE MODIFIER TO ADD TO RANGE CAN HIDE IN ######################
+######### DETERMINE MODIFIER FOR HIDING RANGE ######################
 def hideModCalculation():
     
-    #corrected: uses RETURN so value is sent from LOCAL SCOPE to GLOBAL SCOPE
     if pHideSkill < 0:
-        return 0 #sends 0 to pHideModifier var if <0 entered
+        return 0 #RETURN SAVES VALUE FROM LOCAL TO GLOBAL SCOPE
     if pHideSkill > 0 and pHideSkill <= 5:
         return 1
     elif pHideSkill >= 6 and pHideSkill <= 10:
@@ -32,57 +31,54 @@ def hideModCalculation():
     else:
         print('You have entered a number above 20, please try again')
 
-#store result of hideModCalculation()
-pHideModifier = hideModCalculation()
+pHideModifier = hideModCalculation() #RETURN VALUE PASSES AS ARGUMENT AND IS STORED
 print('Your skill modifier is ' + str(pHideModifier))
-#ROLL SKILL CHECK
 
-input('Press Enter to roll your D20 skill check')
-##stores your hide roll on D20
-pHideRoll = int(random.randint(1,21))
+
+
+
+###########################  DICE ROLLING ##################################
+
+input('Press Enter to roll your D20 skill check') #HIT ENTER TO ENACT BELOW 
+pHideRoll = 1#int(random.randint(1,21)) #CHANGE NUMBER HERE TO TEST 1,20,RANDOM...
 print('The number rolled is ' + str(pHideRoll))
 
 
-#CRITICAL ROLL
-def criticalRoll():
-    if pHideRoll == 20:
+
+def criticalRoll(): # WAS IT A NATURAL 20
+    if pHideRoll == 20: 
+        return pHideRoll
+    
+naturalTwenty = criticalRoll() # TRUE = STORES TRUE
+
+
+def criticalFail():# WAS IT A NATURAL 1
+    if pHideRoll == 1:  
         return pHideRoll
 
-#CRITICAL FAILURE
-def criticalFail():
-    if pHideRoll == 1:
-        return pHideRoll
+naturalOne = criticalFail() # TRUE = STORES TRUE
 
-#WHERE PLAYER HIDING
-
-#DETERMINE WHICH CODE TO RUN BASED ON ROLL
-
-def hideSkillCheck():
+def hideSkillCheck(): #PROVIDE INSIGHT TO SPACES CAN HIDE IN
     if criticalRoll():
-        print("Amazing, you rolled a " +str(pHideRoll)+ " making you essentially invisible thanks to your perfect roll")
+        print("Amazing, you rolled a " +str(pHideRoll)+ ", you gain 10 spaces to hide in")
         
     elif criticalFail():
-        print("you rolled a " +str(pHideRoll)+ " The monster is certain to find you!")
+        print("you rolled a " +str(pHideRoll)+ ", you lose 10 spaces to hide in!")
         
     else:
-        #pHideModifier = hideModCalculation()
-        #totalHide = pHideRoll + pHideModifier
-        print(playerName + ' is able to add ' + str(pHideModifier) + ' to their hide roll.')
+        print(playerName + ' will have ' + str(pHideModifier) + ' extra spaces to hide in.')
         
-
-hideSkillCheck()
-#print(hideSkillCheck)
+hideSkillCheck()#RUNS FX and STORES RESULT TO TERMINAL
 
 
-
-#ADDS PLAYER MOD to RANDOM HIDING SPOT NUMBER
-#SETS AREA MONSTER NEEDS TO SEEK - making easier or harder to find you
-def modifiedHide():
-    if criticalRoll == True:
+def playerSpacesAndLocation(): #CREATES RANGE (HIDING SPACES) AND SPOT(LOCATION) OF YOU BASED ON RANDOM ROLL IN RANGE
+                                # MONSTER PULLS THEIR GUESSING RANGE FROM THIS FUNCTION
+    if naturalTwenty:
         pHidingRange = (1,31)
-        pHidingSpot = int(random.randint (*pHidingRange)) #*makes it a tupple i.e list to pull
+        #USE A TUPPLE (*) TO PULL RANGE FROM 
+        pHidingSpot = int(random.randint (*pHidingRange)) 
         print('range of 1-30')
-    elif criticalFail == True:
+    elif naturalOne:
         pHidingRange = (1,11)
         pHidingSpot = int(random.randint(*pHidingRange))
         print('range of 1-10')
@@ -90,83 +86,63 @@ def modifiedHide():
         pHidingRange = (1,21+pHideModifier)
         pHidingSpot = int(random.randint(*pHidingRange))
         print('range of 1-20 ' + ' + mod')
-    return pHidingSpot, pHidingRange
+    return pHidingSpot, pHidingRange # STORES VALUES OF EACH TO BE CALLED IN GLOBAL SCOPE
 
-pHidingSpot, pHidingRange = modifiedHide() #unpacks tupple and stores in appropriate variables
+pHidingSpot, pHidingRange = playerSpacesAndLocation() #UNPACKS TUPPLE AND ASSIGNS VALUES TO THEIR GLOBAL VAR
 
 input('press enter to see the spaces you can hide in')
-print("Hiding Range: ", pHidingRange)
+print("Hiding Range: ", pHidingRange)#PRINTS VALUE OF pHidingRange (CONCAT NOT NEEDED)
 
 input('press enter to see where hiding')
-print("Hiding Spot: ", pHidingSpot)
+print("Hiding Spot: ", pHidingSpot) #PRINTS VALUE OF pHidingRange (CONCAT NOT NEEDED)
 
-
-
-"""
-#BEFORE USE OF TUPPLE
-    def modifiedHidingRange():
-    if criticalRoll == True:
-        pHidingRange = (1,31)
-        pHidingSpot = int(random.randint (1, 31))
-        print('range of 1-30')
-    elif criticalFail == True:
-        pHidingRange = (1,11)
-        pHidingSpot = int(random.randint(1,11))
-        print('range of 1-10')
-    else:
-        pHidingRange = (1,21+pHideModifier)
-        pHidingSpot = int(random.randint(1,21+pHideModifier))
-        print('range of 1-20 ' + ' + mod')
-    return pHidingRange
-"""
-
-"""
-#saves your hiding spot number to variable after function run
-pHidingSpot = modifiedHidingSpotRange()
-pHidingRange = modifiedHidingSpotRange() 
-#prints your random hiding spot within the provided range
-print(pHidingSpot, pHidingRange)
-#print(pHidingRange)
-"""
-
-#input('Press Enter to Hide')
 print("you are now hidden")
 
 
 ######################    MONSTER INFORMATION ################################
+
+########## MONSTER SEEKING YOU
 input('Press Enter to see which monster is hunting you')
 monsterName = 'Slimer'
 print(monsterName +' has sensed your presence and is ready to find you. If you are able to stay hidden from them for 6 turns you win')
 
 input('press enter to start the hunt')
 
-seekRange = pHidingRange
+######### SET THE AREA & HOW MANY ATTEMPTS TO SEEK YOU OUT 
+seekRange = pHidingRange #found in player section above
 
+maxAttempts = 6   #use maxAttempt variable to set range so nested if will run
 
-#Checks to see if the monster has found the player
-def playerFound():
-    #for loops through 5 attempts i.e. range, starting at 0-4
-    for seek in range(5): 
-        
-        #stores what the monster roles each iteration i.e. attempt
-        #*seekRange is a tupple - i.e. it sets the range based on the pHidingRange
-        seekRoll = int(random.randint(*seekRange))
+rolledValues = set() #CREATES A SET TO STORE rolledValues so not reused
+
+######### DETERMINE IF SEEKER FOUND HIDER
+def playerFound(): 
+    for seek in range(maxAttempts): #LOOP THROUGH CODE x6
+        seekRoll = int(random.randint(*seekRange)) # RANDOM ROLL OCCURS - based on seekRange stored range from pHidingRange
         
         #f string inserts var directly in str. 
         #seek + 1 adds 1 to the number i.e. iteration stored in seek - needed since starts at seek = 0
+        
+        while seekRoll in rolledValues: #LOOP UNTIL seekRoll VALUE HAS NOT BEEN USED i.e. STORED IN rolledValues SET
+            seekRoll = random.randint(*seekRange)
+        
+        rolledValues.add(seekRoll) # ADDS top seekRoll VALUE - if it exists in set then it goes to WHILE STATEMENT to find unique value
+        
         print(f'{monsterName} is seeking....This is attempt number {seek + 1})')
         
-        #1st if - did the monster roll the pHidingSpot
-        if seekRoll == pHidingSpot:
-            print ('You\'ve been slimed. It took ' +str(seek+1) + ' to find you')
+        if seekRoll == pHidingSpot: # FOUND YOU
+            print(pHidingSpot)#BUG TEST: confirms pHiding matches seekRoll
+            print ('You\'ve been slimed. It took ' +str(seek+1) + ' attempts to find you')
             print ('You are mine now!!!')
             break #EXITS THE LOOP IF monster roll = player hiding spot
-        else:
-            remainingAttempts = 5 - seek #Total Attempts can do - iteration on i.e. seek =1 results in 4 remaining
+        
+        else: # TRYING TO FIND YOU
+            remainingAttempts = maxAttempts - (seek+1) #Total Attempts can do - i.e. 5 - seek iteration +1 since start at 0
             print ('Come Out Come Out Wherever You Are!!!! ' + 'I have ' + str(remainingAttempts)+ ' more chances to find you')
             print(seekRoll)
             input("Press Enter to start the next turn")
-            if remainingAttempts == 0:
+            
+            if remainingAttempts == 0: #ANNOUNCES WINNER
                 print(monsterName + " You Idiot! You couln't find me...naner naner naner")
                 break #EXITS THE LOOP IF no more attempts remaining
         
