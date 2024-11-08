@@ -1,0 +1,25 @@
+########### Q1::Create a dictionary of square numbers
+###Write a program that creates a dictionary where the keys are numbers from 1 to 10, and the values are their squares.
+#EX OUTPUT
+{1: 1, 2: 4, 3: 9, 4: 16, 5: 25, 6: 36, 7: 49, 8: 64, 9: 81, 10: 100}
+
+
+####My Solution
+squared = {}
+
+for number in range(11): #use range since counting 1-10
+    squared.setdefault(number,number) #pull the current iteration and save as key if new
+    squared[number] = squared[number] * number #Select KEY of iteration ASSIGN Key value * key value
+
+print(squared)
+
+####GPT SOLUTION#############
+# Create an empty dictionary
+squares_dict = {}
+
+# Use a for loop to populate the dictionary with squares
+for num in range(1, 11):  # Numbers 1 to 10
+    squares_dict[num] = num ** 2  # Key: num, Value: num squared
+
+# Print the result
+print(squares_dict)
