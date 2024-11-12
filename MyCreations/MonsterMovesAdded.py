@@ -152,8 +152,6 @@ seekRange = pHidingRange #found in player section above
 
 maxAttempts = 6  #use maxAttempt variable to set range so nested if will run
 
-
-
 rolledValues = set() #CREATES A SET TO STORE rolledValues so not reused
 
 ######### DETERMINE IF SEEKER FOUND HIDER
